@@ -55,7 +55,15 @@
 
             <!-- Slide 4: RoR -->
             <section>
-                Railway Oriented Programming
+                <section>
+                    Railway Oriented Programming
+                </section>
+
+                <section>
+                    <h4> Exceptions, Exceptions Everywhere </h4>
+                    <img src="media/DivideByZero.gif" class="center">
+                </section>
+
             </section>
 
             <!-- Slide 5: Tired Hands Fun Fun -->
@@ -76,26 +84,80 @@
                 </section>
 
                 <section>
-                    <h4> Webserver Function </h4>
+                    <h4> Web-Server Function </h4>
+                    <img src="media/httpRequestResponse.png" />
+                </section>
 
-                    <div class="fragment" data-fragment-index="1">
-                        <img src="media/httpRequestResponse.png" />
-                    </div>
-
+                <section>
+                    <h4> Web-Server Function </h4>
+                    <img src="media/client-server.png" />
                     <div class="fragment" data-fragment-index="2">
-                        <pre><code data-trim data-noescape>
-                            Request -> Async< Response option >
+                        <pre><code data-trim data-noescape style="text-align: center;"> 
+                            Request -> Async< Response option > 
                         </pre></code>
                     </div>
                 </section>
 
                 <section>
-                    Web Parts
+                    <h4> Simplified Suave Types I </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Request </p>
+                        <pre><code data-trim data-noescape style="text-align: center;"> 
+                            type RequestType = GET | POST | .. </br> type Request = { Route : string; Type : RequestType }
+                        </pre></code>
+                    </div>
+
+                    </br>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <p> Response </p>
+                        <pre><code data-trim data-noescape style="text-align: center;"> 
+                            type StatusCode = int </br>type Response = { Content : string; StatusCode : StatusCode }
+                        </pre></code>
+                    </div>
                 </section>
 
                 <section>
-                    Combinators
+                    <h4> Simplified Suave Types II </h4>
+
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Context </p>
+                        <pre><code data-trim data-noescape style="text-align: center;"> 
+                            type Context = { Request : Request; Response : Response }
+                        </pre></code>
+                    </div>
+
+                    </br>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <p> Async Context </p>
+                        <pre><code data-trim data-noescape style="text-align: center;"> 
+                            Context -> Async< Context > 
+                        </pre></code>
+                    </div>
+
+                    </br>
+
+                    <div class="fragment" data-fragment-index="3">
+                        <p> Option Based Async Context </p>
+                        <pre><code data-trim data-noescape style="text-align: center;"> 
+                            Context -> Async< Context option > 
+                        </pre></code>
+                    </div>
                 </section>
+
+
+
+
+            </section>
+
+            </section>
+
+
+
+            <section>
+                Combinators
+            </section>
             </section>
 
             <!-- Slide 7: Meditation Fun Fun -->
