@@ -292,24 +292,88 @@
                             type WebPart = Context -> Async< Context option > 
                         </pre></code>
                     </div>
+                </section>
 
-                    <div class="fragment" data-fragment-index="2" style="display: inline-block;">
-                        <div> Web Part >=> Web Part = Web Part </div>
+                <section>
+                    <h4> Web-Part Combinators </h4>
+                    <pre item-width="900"><code data-trim> 
+                    let compose webPart1 webPart2 context : WebPart = 
+                        async {
+                            let! firstResult = webPart1 context
+                            match firstResult with
+                            | None   -> return None
+                            | Some f ->
+                                let! secondContextResult = webPart2 f 
+                                return secondContextResult
+                        }
+
+                    let (>=>) compose 
+                    </pre></code>
+                </section>
+
+                <section>
+                    <h4> ROP View </h4>
+                    <img src="media/SuaveROPView.png" style="text-align: center;" />
+                </section>
+
+                <section>
+                    <h4> A Suave Web-Part Example </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape> 
+                            let OK content context : WebPart =
+                                let response = { Content : content; StatusCode = 200 }
+                                { context with Response = response } 
+                                |> Some
+                                |> async.Return
+                        </pre></code>
+                    </div>
+
+                    </br>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <p> Combined: </p>
+                        <pre><code data-trim data-noescape style="text-align:center;"> 
+                        ( OK "All" ) >=> ( OK "Your" ) >=> ( OK "Base" ) ...
+                        </pre></code>
                     </div>
                 </section>
 
                 <section>
-                    </br>
+                    <h4> Filters </h4>
 
-                    A Web Part Example
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape> 
+                            GET    >=> path "/somePath" >=> OK "GET"
+                            POST   >=> path "/somePath" >=> OK "POST" 
+                            PUT    >=> path "/somePath" >=> OK "PUT"
+                            DELETE >=> path "/somePath" >=> OK "DELETE"
+                            HEAD   >=> path "/somePath" >=> OK "HEAD"
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <p> Remember.. </p>
+                        <pre><code data-trim data-noescape>
+                            type RequestType = GET | POST | .. </br>type Request = { Route : string; Type : RequestType }
+                        </pre></code>
+                    </div>
                 </section>
 
                 <section>
-                    Combinators >=>
-                </section>
+                    <h4> From Web-Parts to Web Applications </h4>
+                    <pre><code data-trim data-noescape>
+                        let app : WebPart = choose [  
+                            GET  >=> path "/resource1" >=> OK "r1: GET Success"
+                            POST >=> path "/resource1" >=> OK "r1: POST Success"
+                            path "/resource2" >=> choose [
+                                GET >=> OK "r2: GET Success"
+                                POST >=> OK "r2: POST Success"
+                            ]
+                        ]
 
-                <section>
-                    Filters
+                        // Behind the scenes..
+                        execute context app 
+                    </pre></code>
                 </section>
             </section>
 
@@ -326,8 +390,8 @@
 
             <section>
                 <h4> Talk Inspired by: </h4>
-                <p class="fragment" data-fragment-index="1"> Scott Wlaschin's Railway Oriented Programming </p>
-                <p class="fragment" data-fragment-index="2"> Tamizhvedhan's F# Applied </p>
+                <p class="fragment" data-fragment-index="1"><a href="http://www.bit.ly/railwayorientedprogramming"> Scott Wlaschin's Railway Oriented Programming </a></p>
+                <p class="fragment" data-fragment-index="2"><a href="http://products.tamizhvendan.in/fsharp-applied/"> Tamizhvedhan's F# Applied </a></p>
                 <p class="fragment" data-fragment-index="3"> Tired Hand's Awesome Beer Selection </p>
                 <p class="fragment" data-fragment-index="4"> Meditation </p>
             </section>
