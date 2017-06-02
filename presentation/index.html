@@ -122,7 +122,6 @@
                 <section>
                     <h4> Timer Callback [ Happy Path ] </h4>
                     <ol>
-
                         <li>
                             <p class="fragment" data-fragment-index="1"> Scrape </p>
                         </li>
@@ -134,7 +133,6 @@
                         <li>
                             <p class="fragment" data-fragment-index="3"> Try Alert </p>
                         </li>
-
                     </ol>
 
                     <div class="fragment" data-fragment-index="4">
@@ -178,7 +176,7 @@
 
                 <section>
                     <h4> ROP View </h4>
-                    <img src="media/BeerFunFun.png" />
+                    <img src="media/BeerROP.png" />
                 </section>
 
                 <section>
@@ -198,7 +196,7 @@
                             <p> Manayunk Brewery </p>
                         </li>
                         <li>
-                            <p> Distribution of Updates -> Machine Learning </p>
+                            <p> Distribution of Updates - Machine Learning </p>
                         </li>
                     </ul>
                 </section>
@@ -354,7 +352,8 @@
                     <div class="fragment" data-fragment-index="2">
                         <p> Remember.. </p>
                         <pre><code data-trim data-noescape>
-                            type RequestType = GET | POST | .. </br>type Request = { Route : string; Type : RequestType }
+                            type RequestType = GET | POST | .. 
+                            type Request     = { Route : string; Type : RequestType }
                         </pre></code>
                     </div>
                 </section>
@@ -362,17 +361,16 @@
                 <section>
                     <h4> From Web-Parts to Web Applications </h4>
                     <pre><code data-trim data-noescape>
-                        let app : WebPart = choose [  
-                            GET  >=> path "/resource1" >=> OK "r1: GET Success"
-                            POST >=> path "/resource1" >=> OK "r1: POST Success"
-                            path "/resource2" >=> choose [
-                                GET >=> OK "r2: GET Success"
-                                POST >=> OK "r2: POST Success"
-                            ]
+                    let app : WebPart = choose [  
+                        GET  >=> path "/resource1" >=> OK "r1: GET Success"
+                        POST >=> path "/resource1" >=> OK "r1: POST Success"
+                        path "/resource2" >=> choose [
+                            GET >=> OK "r2: GET Success"
+                            POST >=> OK "r2: POST Success"
                         ]
+                    ]
 
-                        // Behind the scenes..
-                        execute context app 
+                    startWebServer defaultConfig app
                     </pre></code>
                 </section>
             </section>
