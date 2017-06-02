@@ -35,10 +35,6 @@
                 <p> By Moko Sharma </p>
             </section>
 
-            <section>
-                <h4> Talk Inspired by </h4>
-            </section>
-
             <!-- Slide 2: About Me -->
             <section>
                 <h4> About Me </h4>
@@ -97,11 +93,115 @@
                     <p class="fragment" data-fragment-index="4"> Way of Dealing with the Unhappy Path </p>
                 </section>
 
+                <section>
+                    <h4> The Model </h4>
+                </section>
+
+                <section>
+                    <h4> Bind [ >>= ] </h4>
+                </section>
+
+                <section>
+                    <h4> Switch [ >=> ] </h4>
+                </section>
+
             </section>
 
             <!-- Slide 5: Tired Hands Fun Fun -->
             <section>
-                <h4> Tired Hands Fun Fun </h4>
+                <section>
+                    <h4> Tired Hands Fun Fun </h4>
+                    <img src="media/purplehaze.jpg" style="text-align: center;" />
+                </section>
+
+                <section>
+                    <h4> Tired Hands Fun Fun </h4>
+                    <img src="media/beertimer.gif" style="text-align: center;" />
+                </section>
+
+                <section>
+                    <h4> Timer Callback [ Happy Path ] </h4>
+                    <ol>
+
+                        <li>
+                            <p class="fragment" data-fragment-index="1"> Scrape </p>
+                        </li>
+
+                        <li>
+                            <p class="fragment" data-fragment-index="2"> Compare </p>
+                        </li>
+
+                        <li>
+                            <p class="fragment" data-fragment-index="3"> Try Alert </p>
+                        </li>
+
+                    </ol>
+
+                    <div class="fragment" data-fragment-index="4">
+                        <pre><code data-trim data-noescape> 
+                            scrapeWebsiteToCreateBeerInfo 
+                            >=> compareWithPreviousBeerInfo
+                            >=> tryAlertByText 
+                        </pre></code>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Errors / No-Ops [ Unhappy Path ] </h4>
+                    <ol>
+                        <li>
+                            <p class="fragment" data-fragment-index="1"> Scrape - Web Errors </p>
+                        </li>
+
+                        <li>
+                            <p class="fragment" data-fragment-index="2"> Compare - I/O Errors </p>
+                        </li>
+
+                        <li>
+                            <p class="fragment" data-fragment-index="3"> Alert - API Errors </p>
+                        </li>
+
+                        <li>
+                            <p class="fragment" data-fragment-index="4"> No Difference Found </p>
+                        </li>
+                    </ol>
+                    <div class="fragment" data-fragment-index="5">
+                        <pre><code data-trim data-noescape> 
+                            type UnhappyPathMessages =
+                                | WebError of string
+                                | IOError  of string
+                                | APIError of string
+                                | NoDifferenceFound
+                        </pre></code>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> ROP View </h4>
+                    <img src="media/BeerFunFun.png" />
+                </section>
+
+                <section>
+                    <h4> Libraries Used </h4>
+                    <p> Chiron for JSON </p>
+                    <p> Loggary for Logging </p>
+                    <p> C# Twilio API </p>
+                </section>
+
+                <section>
+                    <h4> Next Steps </h4>
+                    <ul>
+                        <li>
+                            <p> Deploy as an Azure Function </p>
+                        </li>
+                        <li>
+                            <p> Manayunk Brewery </p>
+                        </li>
+                        <li>
+                            <p> Distribution of Updates -> Machine Learning </p>
+                        </li>
+                    </ul>
+                </section>
             </section>
 
             <!-- Slide 6: Suave.IO -->
@@ -130,6 +230,7 @@
                     <img src="media/client-server.png" />
                     <div class="fragment" data-fragment-index="2">
                         <pre><code data-trim data-noescape style="text-align: center;"> 
+                            Request -> Response option
                             Request -> Async< Response option > 
                         </pre></code>
                     </div>
@@ -191,6 +292,10 @@
                             type WebPart = Context -> Async< Context option > 
                         </pre></code>
                     </div>
+
+                    <div class="fragment" data-fragment-index="2" style="display: inline-block;">
+                        <div> Web Part >=> Web Part = Web Part </div>
+                    </div>
                 </section>
 
                 <section>
@@ -210,7 +315,21 @@
 
             <!-- Slide 7: Meditation Fun Fun -->
             <section>
-                <h4> Meditation Fun Fun </h4>
+                <section>
+                    <h4> Meditation Fun Fun </h4>
+                </section>
+
+                <section>
+                    <h4> Rest Resource </h4>
+                </section>
+            </section>
+
+            <section>
+                <h4> Talk Inspired by: </h4>
+                <p class="fragment" data-fragment-index="1"> Scott Wlaschin's Railway Oriented Programming </p>
+                <p class="fragment" data-fragment-index="2"> Tamizhvedhan's F# Applied </p>
+                <p class="fragment" data-fragment-index="3"> Tired Hand's Awesome Beer Selection </p>
+                <p class="fragment" data-fragment-index="4"> Meditation </p>
             </section>
 
             <!-- Slide 8: Thank you! -->
