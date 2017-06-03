@@ -121,29 +121,32 @@
                 </section>
 
                 <section>
-                    <h4> Bind [ >>= ] </h4>
-                    <p class="fragment" data-fragment-index="1"> Problem: Not possible to Directly Compose ROP Functions </p>
+                    <h4> Combiner 1: Bind [ >>= ] </h4>
+                    <p class="fragment" data-fragment-index="1"> Converts 1 Input - 2 Output Functions into 2 Input - 2 Output Functions </p>
 
                     <div class="fragment" data-fragment-index="2">
                         <pre><code data-trim data-noescape> 
-                            let bind switchFunction twoTrackInput =
-                                match twoTrackInput with
+                            let bind switchFunction input =
+                                match input with
                                 | Success s -> switchFunction s
                                 | Failure f -> Failure f
 
-                            let (>>=) switchFunction twoTrackInput =
-                                bind switchFunction twoTrackInput
+                            let (>>=) switchFunction input =
+                                bind switchFunction input 
                         </pre></code>
                     </div>
                 </section>
 
                 <section>
-                    <h4> Bind [ >>= ] </h4>
+                    <h4> Combiner 1: Bind [ >>= ] </h4>
 
                     <div class="fragment" data-fragment-index="1">
                         <pre><code data-trim data-noescape> 
                             let combineROPFunctions  = ropFunction1 >> bind ropFunction2
-                            let combineROPFunctions' = ropFunction1 >>= ropFunction2
+                            let combineROPFunctions' input = 
+                                input 
+                                |> ropFunction1 
+                                >>= ropFunction2
                         </pre></code>
                     </div>
 
@@ -154,26 +157,69 @@
                 </section>
 
                 <section>
-                    <h4> Switch [ >=> ] </h4>
-                    <p> Direct Join of one input - two output functions </p>
-                    <p> Mimics the initial structure of one input - two output functions </p>
-                    <p> Impl </p>
+                    <h4> Combiner 2: Switch [ >=> ] </h4>
+                    <p class="fragment" data-fragment-index="1"> Directly Joining ROP Functions </p>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <pre><code data-trim data-noescape> 
+                            let switch switchFunction1 switchFunction2 input =
+                                match switchFunction1 input with
+                                | Success s -> switchFunction2 s
+                                | Failure f -> Failure f
+
+                            let (>=>) switchFunction1 switchFunction2 input =
+                                switch switchFunction1 switchFunction2 input 
+                        </pre></code>
+                    </div>
                 </section>
 
                 <section>
-                    <h4> >=> vs. >>= </h4>
+                    <h4> Combiner 2: Switch [ >=> ] </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape> 
+                            let combineROPFunctions  = switch ropFunction1 ropFunction2
+                            let combineROPFunctions' = ropFunction1 >=> ropFunction2
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <img src="media/ROPModel1.png" />
+                        <img src="media/ROPSwitch.png" />
+                    </div>
                 </section>
 
                 <section>
-                    <h4> ROP Toolkit </h4>
+                    <h4> Adapting Different Functions in this Model </h4>
+                    <div class="fragment" data-fragmnet-index="1">
+                        <p> Case 1: Database Write Functions </p>
+                        <pre><code data-trim data-noescape> 
+                            let writeToDatabase databaseWrite input = 
+                                try
+                                    databaseWrite input |> Success 
+                                with
+                                | ex -> Failure ex.Message
+                        </pre></code>
+                    </div>
+                    <div class="fragment" data-fragmnet-index="2">
+                        <p> Case 2: Mutators </p>
+                        <pre><code data-trim data-noescape> 
+                            let changeData dataChanger input = 
+                                dataChanger input |> Success
+                        </pre></code>
+                    </div>
+                    <div class="fragment" data-fragmnet-index="2">
+                        <p> Case 3: Returns </p>
+                        <pre><code data-trim data-noescape> 
+                            let returnResult successCallback failureCallback result =
+                                match result with
+                                | Success s -> successCallback s 
+                                | Failure f -> failureCallback f 
+                        </pre></code>
+                    </div>
                 </section>
-
-                <section>
-                    <h4> Converting Different Types of Functions in this Model </h4>
-                </section>
-
                 <section>
                     <h4> ROP View </h4>
+                    <img src="media/ROPView.png" />
                 </section>
             </section>
 
