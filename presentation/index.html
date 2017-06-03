@@ -29,13 +29,11 @@
     <div class="reveal">
         <div class="slides">
 
-            <!-- Slide 1: Title -->
             <section>
                 <h4> Beer, Meditation & Railway Oriented Programming </h4>
                 <p> By Moko Sharma </p>
             </section>
 
-            <!-- Slide 2: About Me -->
             <section>
                 <h4> About Me </h4>
                 <ul class="center">
@@ -54,7 +52,6 @@
                     <img src="media/NullReferenceException1.png" class="fragment" data-fragment-index="5" style="position:absolute;top:30%;left:30%;" />
             </section>
 
-            <!-- Slide 3: Agenda -->
             <section>
                 <h4> Agenda </h4>
                 </br>
@@ -74,7 +71,6 @@
                 </ol>
             </section>
 
-            <!-- Slide 4: RoR -->
             <section>
                 <section>
                     <h4> Railway Oriented Programming </h4>
@@ -87,36 +83,104 @@
 
                 <section>
                     <h4> What is ROP? </h4>
-                    <p class="fragment" data-fragment-index="1"> Clean </p>
-                    <p class="fragment" data-fragment-index="2"> Functional </p>
-                    <p class="fragment" data-fragment-index="3"> Robust </p>
-                    <p class="fragment" data-fragment-index="4"> Way of Dealing with the Unhappy Path </p>
+                    <p class="fragment" data-fragment-index="1"> Is a.. </p>
+                    <p class="fragment" data-fragment-index="2"> Clean, </p>
+                    <p class="fragment" data-fragment-index="3"> Functional, </p>
+                    <p class="fragment" data-fragment-index="4"> Robust, </p>
+                    <p class="fragment" data-fragment-index="5"> Way of Dealing with the Unhappy Path </p>
                 </section>
 
                 <section>
-                    <h4> The Model </h4>
+                    <h4> The Model I </h4>
+
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape> 
+                            type Input = ...
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape> 
+                            type Result<'TSuccess, 'TFailure> =
+                                | Success of 'TSuccess
+                                | Failure of 'TFailure
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <img src="media/ROPModel1.png" />
+                    </div>
+                </section>
+
+                <section>
+                    <h4> The Model II </h4>
+                    <p class="fragment" data-fragment-index="1"> Goal: To Combine / Compose ROP Functions into a Robust Framework </p>
+                    <div class="fragment" data-fragment-index="2">
+                        <img src="media/ROPModel2.png" />
+                    </div>
                 </section>
 
                 <section>
                     <h4> Bind [ >>= ] </h4>
+                    <p class="fragment" data-fragment-index="1"> Problem: Not possible to Directly Compose ROP Functions </p>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <pre><code data-trim data-noescape> 
+                            let bind switchFunction twoTrackInput =
+                                match twoTrackInput with
+                                | Success s -> switchFunction s
+                                | Failure f -> Failure f
+
+                            let (>>=) switchFunction twoTrackInput =
+                                bind switchFunction twoTrackInput
+                        </pre></code>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Bind [ >>= ] </h4>
+
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape> 
+                            let combineROPFunctions  = ropFunction1 >> bind ropFunction2
+                            let combineROPFunctions' = ropFunction1 >>= ropFunction2
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <img src="media/ROPModel1.png" />
+                        <img src="media/ROPBind.png" />
+                    </div>
                 </section>
 
                 <section>
                     <h4> Switch [ >=> ] </h4>
+                    <p> Direct Join of one input - two output functions </p>
+                    <p> Mimics the initial structure of one input - two output functions </p>
+                    <p> Impl </p>
                 </section>
 
+                <section>
+                    <h4> >=> vs. >>= </h4>
+                </section>
+
+                <section>
+                    <h4> ROP Toolkit </h4>
+                </section>
+
+                <section>
+                    <h4> Converting Different Types of Functions in this Model </h4>
+                </section>
+
+                <section>
+                    <h4> ROP View </h4>
+                </section>
             </section>
 
-            <!-- Slide 5: Tired Hands Fun Fun -->
             <section>
                 <section>
                     <h4> Tired Hands Fun Fun </h4>
                     <img src="media/purplehaze.jpg" style="text-align: center;" />
-                </section>
-
-                <section>
-                    <h4> Tired Hands Fun Fun </h4>
-                    <img src="media/beertimer.gif" style="text-align: center;" />
                 </section>
 
                 <section>
@@ -143,28 +207,6 @@
                 </section>
 
                 <section>
-                    <h4> C# Version [ Simplified As Much As Possible ] </h4>
-                    <pre><code data-trim data-noescape> 
-                        ...
-                        BeerInfo latestResults = ScrapeTiredHandsBeer(); 
-                        if ( latestResults == null )
-                        {
-                            LogInformation( ... );
-                            return;
-                        }
-
-                        BeerInfo compare = GetDifferences();
-                        if ( compare == null )
-                        {
-                            LogInformation( ... );
-                            return;
-                        }
-
-                        TryAlert( differencesBetweenTheResults );
-                    </pre></code>
-                </section>
-
-                <section>
                     <h4> Errors / No-Ops [ Unhappy Path ] </h4>
                     <ol>
                         <li>
@@ -185,7 +227,7 @@
                     </ol>
                     <div class="fragment" data-fragment-index="5">
                         <pre><code data-trim data-noescape> 
-                            type UnhappyPathMessages =
+                            type Errors =
                                 | WebError of string
                                 | IOError  of string
                                 | APIError of string
@@ -216,7 +258,7 @@
                             <p> Deploy as an Azure Function </p>
                         </li>
                         <li>
-                            <p> Manayunk Brewery </p>
+                            <p> Manayunk Brewery + Others </p>
                         </li>
                         <li>
                             <p> Distribution of Updates - Machine Learning </p>
@@ -225,7 +267,6 @@
                 </section>
             </section>
 
-            <!-- Slide 6: Suave.IO -->
             <section>
                 <section>
                     <h4> Suave.IO </h4>
@@ -364,11 +405,8 @@
 
                     <div class="fragment" data-fragment-index="1">
                         <pre><code data-trim data-noescape> 
-                            GET    >=> path "/somePath" >=> OK "GET"
-                            POST   >=> path "/somePath" >=> OK "POST" 
-                            PUT    >=> path "/somePath" >=> OK "PUT"
-                            DELETE >=> path "/somePath" >=> OK "DELETE"
-                            HEAD   >=> path "/somePath" >=> OK "HEAD"
+                            GET  >=> path "/somePath" >=> OK "GET"
+                            POST >=> path "/somePath" >=> OK "POST" 
                         </pre></code>
                     </div>
 
@@ -398,7 +436,6 @@
                 </section>
             </section>
 
-            <!-- Slide 7: Meditation Fun Fun -->
             <section>
                 <section>
                     <h4> Meditation Fun Fun </h4>
@@ -413,11 +450,10 @@
                 <h4> Talk Inspired by: </h4>
                 <p class="fragment" data-fragment-index="1"><a href="http://www.bit.ly/railwayorientedprogramming"> Scott Wlaschin's Railway Oriented Programming </a></p>
                 <p class="fragment" data-fragment-index="2"><a href="http://products.tamizhvendan.in/fsharp-applied/"> Tamizhvedhan's F# Applied </a></p>
-                <p class="fragment" data-fragment-index="3"> Tired Hand's Awesome Beer Selection </p>
-                <p class="fragment" data-fragment-index="4"> Meditation </p>
+                <p class="fragment" data-fragment-index="3"><a href="http://www.tiredhands.com/"> Tired Hand's Awesome Beer Selection </a></p>
+                <p class="fragment" data-fragment-index="4"><a href="https://www.reddit.com/r/30daysit/"> /r/30DaySit </a></p>
             </section>
 
-            <!-- Slide 8: Thank you! -->
             <section>
                 <h4> Thank you! </h4>
                 <p> Questions? </p>
