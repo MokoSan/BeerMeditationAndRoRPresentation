@@ -136,12 +136,32 @@
                     </ol>
 
                     <div class="fragment" data-fragment-index="4">
-                        <pre><code data-trim data-noescape> 
-                            scrapeWebsiteToCreateBeerInfo 
-                            >=> compareWithPreviousBeerInfo
-                            >=> tryAlertByText 
+                        <pre><code data-trim data-noescape style="text-align:center;"> 
+                            scrape >=> compare >=> tryAlert
                         </pre></code>
                     </div>
+                </section>
+
+                <section>
+                    <h4> C# Version [ Simplified As Much As Possible ] </h4>
+                    <pre><code data-trim data-noescape> 
+                        ...
+                        BeerInfo latestResults = ScrapeTiredHandsBeer(); 
+                        if ( latestResults == null )
+                        {
+                            LogInformation( ... );
+                            return;
+                        }
+
+                        BeerInfo compare = GetDifferences();
+                        if ( compare == null )
+                        {
+                            LogInformation( ... );
+                            return;
+                        }
+
+                        TryAlert( differencesBetweenTheResults );
+                    </pre></code>
                 </section>
 
                 <section>
@@ -176,13 +196,16 @@
 
                 <section>
                     <h4> ROP View </h4>
-                    <img src="media/BeerROP.png" />
+                    <img src="media/BeerROPView.png" />
+                    <pre><code data-trim data-noescape style="text-align:center;"> 
+                    type BeerInfo = {ScrapeDateTime : Date; Beers : string list}
+                    </pre></code>
                 </section>
 
                 <section>
                     <h4> Libraries Used </h4>
                     <p> Chiron for JSON </p>
-                    <p> Loggary for Logging </p>
+                    <p> Logary for Logging </p>
                     <p> C# Twilio API </p>
                 </section>
 
