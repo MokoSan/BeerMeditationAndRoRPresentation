@@ -405,10 +405,8 @@
                         async {
                             let! firstResult = webPart1 context
                             match firstResult with
-                            | None   -> return None
-                            | Some f ->
-                                let! secondContextResult = webPart2 f 
-                                return secondContextResult
+                            | Some f -> return! webPart2 f 
+                            | None   -> return! None
                         }
 
                     let (>=>) compose 
