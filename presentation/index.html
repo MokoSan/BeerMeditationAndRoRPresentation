@@ -83,11 +83,11 @@
 
                 <section>
                     <h4> What is ROP? </h4>
-                    <p class="fragment" data-fragment-index="1"> Is a.. </p>
-                    <p class="fragment" data-fragment-index="2"> Clean, </p>
-                    <p class="fragment" data-fragment-index="3"> Functional, </p>
-                    <p class="fragment" data-fragment-index="4"> Robust, </p>
-                    <p class="fragment" data-fragment-index="5"> Way of Dealing with the Unhappy Path </p>
+                    <p> Is a.. </p>
+                    <p> Clean, </p>
+                    <p> Functional, </p>
+                    <p> Robust, </p>
+                    <p> Way of Dealing with the Unhappy Path </p>
                 </section>
 
                 <section>
@@ -114,8 +114,8 @@
 
                 <section>
                     <h4> The Model II </h4>
-                    <p class="fragment" data-fragment-index="1"> Goal: To Combine / Compose 1 Input - 2 Output Functions into a Robust Framework </p>
-                    <div class="fragment" data-fragment-index="2">
+                    <p> Goal: To Combine / Compose 1 Input - 2 Output Functions into a Robust Framework </p>
+                    <div>
                         <img src="media/ROPModel2.png" />
                     </div>
                 </section>
@@ -210,16 +210,12 @@
                     <div class="fragment" data-fragmnet-index="2">
                         <p> Case 3: Returns </p>
                         <pre><code data-trim data-noescape> 
-                            let returnResult successCallback failureCallback result =
+                            let doubleMap successCallback failureCallback result =
                                 match result with
                                 | Success s -> successCallback s 
                                 | Failure f -> failureCallback f 
                         </pre></code>
                     </div>
-                </section>
-                <section>
-                    <h4> ROP View </h4>
-                    <img src="media/ROPView.png" />
                 </section>
             </section>
 
@@ -575,7 +571,7 @@
                         <p> Api.Controller.Common </p>
                         <pre><code data-trim data-noescape>
                         
-                        let getWebPartFromRestResource : WebPart = 
+                        let getWebPartFromRestResource resource : WebPart = 
                             ...
 
                             let handleResource requestError = function 
