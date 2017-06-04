@@ -114,7 +114,7 @@
 
                 <section>
                     <h4> The Model II </h4>
-                    <p class="fragment" data-fragment-index="1"> Goal: To Combine / Compose ROP Functions into a Robust Framework </p>
+                    <p class="fragment" data-fragment-index="1"> Goal: To Combine / Compose 1 Input - 2 Output Functions into a Robust Framework </p>
                     <div class="fragment" data-fragment-index="2">
                         <img src="media/ROPModel2.png" />
                     </div>
@@ -485,10 +485,136 @@
             <section>
                 <section>
                     <h4> Meditation Fun Fun </h4>
+                    <img src="media/meditatingLady.png" />
+                </section>
+
+                <section>
+                    <h4> Meditation Fun Fun </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Is a Meditation Timer and Journal SPA </p>
+                    </div>
+                    <div class="fragment" data-fragment-index="2">
+                        <img src="media/MeditationFunFunOverview.png" />
+                    </div>
                 </section>
 
                 <section>
                     <h4> Rest Resource </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <pre><code data-trim data-noescape>
+                        type RestResource< 'TModel > = {
+                            Name     : string
+                            GetAll   : unit    -> seq<'TModel>
+                            GetById  : id      -> 'T option 
+                            IsExists : id      -> bool 
+                            Create   : 'TModel -> 'TModel
+                            Update   : int     -> 'TModel -> 'TModel
+                            Delete   : int     -> unit
+                        }
+                        </pre></code>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Journals </h4>
+
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Data Model </p>
+                        <pre><code data-trim data-noescape>
+                            type Journal = { Title : string; 
+                                             DateOfMeditation: DateTime; 
+                                             Content : string }
+                        </code></pre>
+                        <div class="fragment" data-fragment-index="2">
+                            <p> Database Connectivity </p>
+                            <pre><code data-trim data-noescape>
+                                let connectionString = "..." 
+                                type sql = 
+                                    SqlDataProvider< ConnectionString = connectionString >
+
+                                let dbContext = sql.GetDataContext()
+                                let databaseContext  = sql.GetDataContext() 
+                            </pre></code>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Journal CRUD </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Selecting Specific Rows </p>
+                        <pre><code data-trim data-noescape>
+                        ...
+                        let journalDbo = query {
+                                for j in dbo.Journals do
+                                where j.Id = id
+                                select j
+                                headOrDefault
+                            }
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <p> Creating New Journals </p>
+                        <pre><code data-trim data-noescape>
+                            let newJournalDbo = dbo.Journals.Create()
+                        </pre></code>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="3">
+                        <p> Deleting Journals </p>
+                        <pre><code data-trim data-noescape>
+                            journalDbo.Delete()
+                        </pre></code>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Combining Model and Controller I </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Api.Controller.Common </p>
+                        <pre><code data-trim data-noescape>
+                        
+                        let getWebPartFromRestResource : WebPart = 
+                            ...
+
+                            let handleResource requestError = function 
+                                | Some r -> r |> Jsonize
+                                | None   -> requestError
+
+                            let getResourceById = 
+                                resource.GetById >> handleResource ( NOT_FOUND "Resource Not Found" )
+
+                            GET >=> pathScan resourceIdPath getResourceById
+                        </code></pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Combining Model and Controller II </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Api.Controller.Journal </p>
+                        <pre><code data-trim data-noescape>
+                        let journalWebPart = getWebPartFromRestResource {
+                            Name       = "journals"
+                            GetAll     = getAllJournals 
+                            GetById    = getJournalById
+                            Create     = createNewJournal
+                            Update     = updateJournal 
+                            UpdateById = updateJournalWithId
+                            Delete     = deleteJournal 
+                            IsExists   = isJournalExists 
+                        }
+                        </code></pre>
+                    </div>
+
+                    <div class="fragment" data-fragment-index="2">
+                        <p> App </p>
+                        <pre><code data-trim data-noescape>
+                        let api = choose [ journalWebPart; ]
+                        startWebServer defaultConfig api 
+                        </code></pre>
+                    </div>
                 </section>
             </section>
 
