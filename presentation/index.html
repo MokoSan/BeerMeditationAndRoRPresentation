@@ -316,12 +316,11 @@
 
                 <section>
                     <img src="media/SuaveLogo.gif">
-                    <p class="fragment" data-fragment-index="1"> Is a ..
-                        <p class="fragment" data-fragment-index="2"> Non-Blocking, </p>
-                    </p>
-                    <p class="fragment" data-fragment-index="3"> Lightweight, </p>
-                    <p class="fragment" data-fragment-index="4"> Functional-First, </p>
-                    <p class="fragment" data-fragment-index="5"> F# Web Development Library </p>
+                    <p> Is a .. </p>
+                    <p> Non-Blocking, </p>
+                    <p> Lightweight, </p>
+                    <p> Functional-First, </p>
+                    <p> F# Web Development Library </p>
                 </section>
 
                 <section>
@@ -499,8 +498,8 @@
                         type RestResource< 'TModel > = {
                             Name     : string
                             GetAll   : unit    -> seq<'TModel>
-                            GetById  : id      -> 'T option 
-                            IsExists : id      -> bool 
+                            GetById  : int     -> 'T option 
+                            IsExists : int     -> bool 
                             Create   : 'TModel -> 'TModel
                             Update   : int     -> 'TModel -> 'TModel
                             Delete   : int     -> unit
@@ -527,7 +526,7 @@
                                     SqlDataProvider< ConnectionString = connectionString >
 
                                 let dbContext = sql.GetDataContext()
-                                let databaseContext  = sql.GetDataContext() 
+                                let dbo       = dbContext.Dbo
                             </pre></code>
                         </div>
                     </div>
@@ -552,6 +551,7 @@
                         <p> Creating New Journals </p>
                         <pre><code data-trim data-noescape>
                             let newJournalDbo = dbo.Journals.Create()
+                            newJournalDbo.Title <- "Meditation - 06/07/2017"
                         </pre></code>
                     </div>
 
