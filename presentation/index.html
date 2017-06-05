@@ -400,7 +400,7 @@
                 <section>
                     <h4> Web-Part Combinators </h4>
                     <pre item-width="900"><code data-trim> 
-                    let compose webPart1 webPart2 context : WebPart = 
+                    let combine webPart1 webPart2 context : WebPart = 
                         async {
                             let! firstResult = webPart1 context
                             match firstResult with
@@ -408,7 +408,7 @@
                             | None   -> return! None
                         }
 
-                    let (>=>) compose 
+                    let (>=>) combine 
                     </pre></code>
                 </section>
 
