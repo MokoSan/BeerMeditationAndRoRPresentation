@@ -123,7 +123,16 @@
                 <section>
                     <h4> Combiner 1: Bind [ >>= ] </h4>
                     <p class="fragment" data-fragment-index="1"> Converts 1 Input - 2 Output Functions into 2 Input - 2 Output Functions </p>
+                    <div class="fragment" data-fragment-index="2">
+                        <img src="media/ROPModel1.png" />
+                        <img src="media/ROPBind.png" />
+                    </div>
+                </section>
 
+                <section>
+                    <h4> Combiner 1: Bind [ >>= ] </h4>
+
+                    <p class="fragment" data-fragment-index="1"> Directly Joining 1 Input - 2 Output Functions Together </p>
                     <div class="fragment" data-fragment-index="2">
                         <pre><code data-trim data-noescape> 
                             let bind switchFunction input =
@@ -135,12 +144,7 @@
                                 bind switchFunction input 
                         </pre></code>
                     </div>
-                </section>
-
-                <section>
-                    <h4> Combiner 1: Bind [ >>= ] </h4>
-
-                    <div class="fragment" data-fragment-index="1">
+                    <div class="fragment" data-fragment-index="3">
                         <pre><code data-trim data-noescape> 
                             let combineROPFunctions  = ropFunction1 >> bind ropFunction2
                             let combineROPFunctions' input = 
@@ -149,17 +153,19 @@
                                 >>= ropFunction2
                         </pre></code>
                     </div>
+                </section>
+
+                <section>
+                    <h4> Combiner 2: Switch [ >=> ] </h4>
 
                     <div class="fragment" data-fragment-index="2">
                         <img src="media/ROPModel1.png" />
-                        <img src="media/ROPBind.png" />
+                        <img src="media/ROPSwitch.png" />
                     </div>
                 </section>
 
                 <section>
                     <h4> Combiner 2: Switch [ >=> ] </h4>
-                    <p class="fragment" data-fragment-index="1"> Directly Joining 1 Input - 2 Output Functions Together </p>
-
                     <div class="fragment" data-fragment-index="2">
                         <pre><code data-trim data-noescape> 
                             let switch switchFunction1 switchFunction2 input =
@@ -171,20 +177,11 @@
                                 switch switchFunction1 switchFunction2 input 
                         </pre></code>
                     </div>
-                </section>
-
-                <section>
-                    <h4> Combiner 2: Switch [ >=> ] </h4>
-                    <div class="fragment" data-fragment-index="1">
+                    <div class="fragment" data-fragment-index="3">
                         <pre><code data-trim data-noescape> 
                             let combineROPFunctions  = switch ropFunction1 ropFunction2
                             let combineROPFunctions' = ropFunction1 >=> ropFunction2
                         </pre></code>
-                    </div>
-
-                    <div class="fragment" data-fragment-index="2">
-                        <img src="media/ROPModel1.png" />
-                        <img src="media/ROPSwitch.png" />
                     </div>
                 </section>
 
@@ -195,20 +192,21 @@
                         <pre><code data-trim data-noescape> 
                             let writeToDatabase databaseWrite input = 
                                 try
-                                    databaseWrite input |> Success 
+                                    databaseWrite input 
+                                    Success input
                                 with
                                 | ex -> Failure ex.Message
                         </pre></code>
                     </div>
                     <div class="fragment" data-fragmnet-index="2">
-                        <p> Case 2: Mutators </p>
+                        <p> Case 2: Methods that Are Always Successful </p>
                         <pre><code data-trim data-noescape> 
                             let changeData dataChanger input = 
                                 dataChanger input |> Success
                         </pre></code>
                     </div>
                     <div class="fragment" data-fragmnet-index="2">
-                        <p> Case 3: Returns </p>
+                        <p> Case 3: Returns - What Happens in the End? </p>
                         <pre><code data-trim data-noescape> 
                             let doubleMap successCallback failureCallback result =
                                 match result with
@@ -400,12 +398,12 @@
                 <section>
                     <h4> Web-Part Combinators </h4>
                     <pre item-width="900"><code data-trim> 
-                    let combine webPart1 webPart2 context : WebPart = 
+                    let combine webPart1 webPart2 context = 
                         async {
                             let! firstResult = webPart1 context
                             match firstResult with
                             | Some f -> return! webPart2 f 
-                            | None   -> return! None
+                            | None   -> return None
                         }
 
                     let (>=>) combine 
@@ -444,6 +442,16 @@
 
                     <div class="fragment" data-fragment-index="1">
                         <pre><code data-trim data-noescape> 
+                            let iff condition context = 
+                                if condition then 
+                                    context |> Some |> async.Return
+                                else 
+                                    None |> async.Return
+
+                            let GET = iff ( fun context -> context.Request.Type = GET )
+                            let path inputPath = 
+                                iff ( fun context -> context.Request.Route = inputPath ) 
+
                             GET  >=> path "/somePath" >=> OK "GET"
                             POST >=> path "/somePath" >=> OK "POST" 
                         </pre></code>
@@ -456,6 +464,21 @@
                             type Request     = { Route : string; Type : RequestType }
                         </pre></code>
                     </div>
+                </section>
+
+                <section>
+                    <h4> Choosing Web-Parts </h4>
+                    <pre><code data-trim data-noescape>
+                    let rec choose webParts context : WebPart option = async {
+                        match webParts with
+                        | [] -> return None
+                        | x :: xs -> 
+                            let! result = x context 
+                            match result with 
+                            | Some r -> return! Some r 
+                            | None   -> choose xs context
+                    }
+                    </pre></code>
                 </section>
 
                 <section>
@@ -498,7 +521,7 @@
                         type RestResource< 'TModel > = {
                             Name     : string
                             GetAll   : unit    -> seq<'TModel>
-                            GetById  : int     -> 'T option 
+                            GetById  : int     -> 'TModel option 
                             IsExists : int     -> bool 
                             Create   : 'TModel -> 'TModel
                             Update   : int     -> 'TModel -> 'TModel
@@ -609,6 +632,16 @@
                         startWebServer defaultConfig api 
                         </code></pre>
                     </div>
+                </section>
+
+                <section>
+                    <h4> Next Steps </h4>
+                    <ul>
+                        <li> Multiple Users + User Authentication </li>
+                        <li> Dockerize </li>
+                        <li> Deploy via Azure </li>
+                        <li> Integrate with the FitBit Api </li>
+                    </ul>
                 </section>
             </section>
 
