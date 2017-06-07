@@ -32,6 +32,7 @@
             <section>
                 <h4> Beer, Meditation & Railway Oriented Programming </h4>
                 <p> By Moko Sharma </p>
+                <p> [ @MokoSan ] </p>
             </section>
 
             <section>
@@ -131,9 +132,7 @@
 
                 <section>
                     <h4> Combiner 1: Bind [ >>= ] </h4>
-
-                    <p class="fragment" data-fragment-index="1"> Directly Joining 1 Input - 2 Output Functions Together </p>
-                    <div class="fragment" data-fragment-index="2">
+                    <div class="fragment" data-fragment-index="1">
                         <pre><code data-trim data-noescape> 
                             let bind switchFunction input =
                                 match input with
@@ -144,7 +143,7 @@
                                 bind switchFunction input 
                         </pre></code>
                     </div>
-                    <div class="fragment" data-fragment-index="3">
+                    <div class="fragment" data-fragment-index="2">
                         <pre><code data-trim data-noescape> 
                             let combineROPFunctions  = ropFunction1 >> bind ropFunction2
                             let combineROPFunctions' input = 
@@ -158,7 +157,7 @@
                 <section>
                     <h4> Combiner 2: Switch [ >=> ] </h4>
                     <p> Combining Many 1 Input - 2 Output Functions Together into One Function </p>
-                    <div class="fragment" data-fragment-index="2">
+                    <div class="fragment" data-fragment-index="1">
                         <img src="media/ROPModel1.png" />
                         <img src="media/ROPSwitch.png" />
                     </div>
@@ -166,7 +165,7 @@
 
                 <section>
                     <h4> Combiner 2: Switch [ >=> ] </h4>
-                    <div class="fragment" data-fragment-index="2">
+                    <div class="fragment" data-fragment-index="1">
                         <pre><code data-trim data-noescape> 
                             let switch switchFunction1 switchFunction2 input =
                                 match switchFunction1 input with
@@ -177,7 +176,7 @@
                                 switch switchFunction1 switchFunction2 input 
                         </pre></code>
                     </div>
-                    <div class="fragment" data-fragment-index="3">
+                    <div class="fragment" data-fragment-index="2">
                         <pre><code data-trim data-noescape> 
                             let combineROPFunctions  = switch ropFunction1 ropFunction2
                             let combineROPFunctions' = ropFunction1 >=> ropFunction2
@@ -206,7 +205,7 @@
                         </pre></code>
                     </div>
                     <div class="fragment" data-fragmnet-index="2">
-                        <p> Case 3: Returns - What Happens in the End? </p>
+                        <p> Case 3: What Happens in the End?! </p>
                         <pre><code data-trim data-noescape> 
                             let doubleMap successCallback failureCallback result =
                                 match result with
@@ -217,7 +216,7 @@
                 </section>
 
                 <section>
-                    <h4> An ROP Example : Saving Customer to Database </h4>
+                    <h4> An ROP Example : Saving Customer Info to a Database </h4>
                     <ul>
                         <li>
                             <p> Validate Input </p>
@@ -300,6 +299,8 @@
                     <pre><code data-trim data-noescape style="text-align:center;"> 
                     type BeerInfo = {ScrapeDateTime : Date; Beers : string list}
                     </pre></code>
+                    <img src="media/BeerFunFunText.png" />
+
                 </section>
 
                 <section>
@@ -387,15 +388,6 @@
                     </br>
 
                     <div class="fragment" data-fragment-index="2">
-                        <p> Async Context </p>
-                        <pre><code data-trim data-noescape style="text-align: center;"> 
-                            Context -> Async< Context > 
-                        </pre></code>
-                    </div>
-
-                    </br>
-
-                    <div class="fragment" data-fragment-index="3">
                         <p> Option Based Async Context </p>
                         <pre><code data-trim data-noescape style="text-align: center;"> 
                             Context -> Async< Context option > 
@@ -514,6 +506,12 @@
                     startWebServer defaultConfig app
                     </pre></code>
                 </section>
+
+                <section>
+                    <h4 class="fragment" data-fragment-index="1"> This </h4>
+                    <h4 class="fragment" data-fragment-index="2"> Is </h4>
+                    <img src="media/ThisIsSuave.jpg" class="fragment" data-fragment-index="3" />
+                </section>
             </section>
 
             <section>
@@ -546,6 +544,27 @@
                             Delete   : int     -> unit
                         }
                         </pre></code>
+                    </div>
+                </section>
+
+                <section>
+                    <h4> Creating WebParts from Rest Resources </h4>
+                    <div class="fragment" data-fragment-index="1">
+                        <p> Api.Controller.Common </p>
+                        <pre><code data-trim data-noescape>
+                        
+                        let getWebPartFromRestResource resource : WebPart = 
+                            ...
+
+                            let handleResource requestError = function 
+                                | Some r -> r |> Jsonize
+                                | None   -> requestError
+
+                            let getResourceById = 
+                                resource.GetById >> handleResource ( NOT_FOUND "Resource Not Found" )
+
+                            GET >=> pathScan resourceIdPath getResourceById
+                        </code></pre>
                     </div>
                 </section>
 
@@ -606,27 +625,6 @@
 
                 <section>
                     <h4> Combining Model and Controller I </h4>
-                    <div class="fragment" data-fragment-index="1">
-                        <p> Api.Controller.Common </p>
-                        <pre><code data-trim data-noescape>
-                        
-                        let getWebPartFromRestResource resource : WebPart = 
-                            ...
-
-                            let handleResource requestError = function 
-                                | Some r -> r |> Jsonize
-                                | None   -> requestError
-
-                            let getResourceById = 
-                                resource.GetById >> handleResource ( NOT_FOUND "Resource Not Found" )
-
-                            GET >=> pathScan resourceIdPath getResourceById
-                        </code></pre>
-                    </div>
-                </section>
-
-                <section>
-                    <h4> Combining Model and Controller II </h4>
                     <div class="fragment" data-fragment-index="1">
                         <p> Api.Controller.Journal </p>
                         <pre><code data-trim data-noescape>
